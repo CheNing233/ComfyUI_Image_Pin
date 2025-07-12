@@ -1,25 +1,31 @@
 import torch
 import numpy as np
-from PIL import Image,ImageOps
+from PIL import Image, ImageOps
 import base64
 from io import BytesIO
 import folder_paths
 import os
 
+
 class ImagePin:
     @classmethod
     def INPUT_TYPES(s):
         input_dir = folder_paths.get_input_directory()
-        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
-        return {"required": {
-                                "image": (sorted(files) + ["#DATA"], {"image_upload": True}),
-                                "image_data": ("STRING", {"multiline": False}),
-                            },
-                }
+        files = [
+            f
+            for f in os.listdir(input_dir)
+            if os.path.isfile(os.path.join(input_dir, f))
+        ]
+        return {
+            "required": {
+                "image": (sorted(files) + ["#DECODE_FROM_BASE64"], {"image_upload": True}),
+                "image_data": ("STRING", {"multiline": False}),
+            },
+        }
 
     CATEGORY = "utils"
 
-    RETURN_TYPES = ("IMAGE", "MASK")
+    RETURN_TYPES = ("IMAGE",)
     FUNCTION = "load_image"
 
     def load_image(self, image, image_data):
@@ -29,9 +35,11 @@ class ImagePin:
         image = i.convert("RGB")
         image = np.array(image).astype(np.float32) / 255.0
         image = torch.from_numpy(image)[None,]
-        if 'A' in i.getbands():
-            mask = np.array(i.getchannel('A')).astype(np.float32) / 255.0
-            mask = 1. - torch.from_numpy(mask)
-        else:
-            mask = torch.zeros((64, 64), dtype=torch.float32, device="cpu")
-        return (image, mask.unsqueeze(0))
+        return (image,)
+
+    @classmethod
+    def VALIDATE_INPUTS(cls, image, image_data):
+        if image_data is None:
+            return "image_data is required"
+
+        return True

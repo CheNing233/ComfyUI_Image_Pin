@@ -9,18 +9,21 @@ function load_image(str) {
 app.registerExtension({
 	name: "Comfy.ImagePin",
 	nodeCreated(node, app) {
-		if(node.comfyClass === "ImagePin") {
+		if (node.comfyClass === "ImagePin") {
 			let w = node.widgets.find(obj => obj.name === 'image_data');
 			w.hidden = true;
-			
+			w.disabled = true;
+
 			Object.defineProperty(w, 'value', {
 				set(v) {
-					if(v != '[IMAGE DATA]')
+					if (v != '[IMAGE DATA]')
 						w._value = v;
+
+					console.log("widget", w);
 				},
 				get() {
 					const stackTrace = new Error().stack;
-					if(!stackTrace.includes('draw') && !stackTrace.includes('graphToPrompt') && stackTrace.includes('app.js')) {
+					if (!stackTrace.includes('draw') && !stackTrace.includes('graphToPrompt') && stackTrace.includes('app.js')) {
 						return "[IMAGE DATA]";
 					}
 					else {
@@ -46,8 +49,8 @@ app.registerExtension({
 				set(v) {
 					if (v && !v[0].complete) {
 						let orig_onload = v[0].onload;
-						v[0].onload = function(v2) {
-							if(orig_onload)
+						v[0].onload = function (v2) {
+							if (orig_onload)
 								orig_onload();
 							set_img_act(v);
 						};
@@ -57,9 +60,9 @@ app.registerExtension({
 					}
 				},
 				get() {
-					if(this._img == undefined && w.value != '') {
+					if (this._img == undefined && w.value != '') {
 						this._img = [new Image()];
-						if(w.value && w.value != '[IMAGE DATA]')
+						if (w.value && w.value != '[IMAGE DATA]')
 							this._img[0].src = w.value;
 					}
 
@@ -67,5 +70,5 @@ app.registerExtension({
 				}
 			});
 		}
-    }
+	}
 })
