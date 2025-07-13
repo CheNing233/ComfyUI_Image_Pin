@@ -6,11 +6,12 @@ ComfyUI Image Pin 是一个 ComfyUI 的插件，允许您在 ComfyUI 工作流�
 
 ### 功能
 
-- 钉住图片并转换为Base64字符串嵌入到工作流中
+#### 1. 钉住图片并转换为Base64字符串嵌入到工作流中
 ![example](./example/1.png)
 
-- [New❗] 支持压缩为WebP格式的Base64字符串
+#### 2. [New❗] 支持压缩为WebP格式的Base64字符串
 ![example](./example/3.png)
+![example](./example/4.png)
 
 #### 原理
 
@@ -48,4 +49,8 @@ ComfyUI Image Pin 是一个 ComfyUI 的插件，允许您在 ComfyUI 工作流�
 
 ### 使用方法
 
-搜索 `ImagePin` 节点
+搜索 `Image PinNode` 节点
+
+### Thanks
+
+节点部分代码来自 [ComfyUI-Inspire-Pack By ltdrdata](https://github.com/ltdrdata/ComfyUI-Inspire-Pack)
