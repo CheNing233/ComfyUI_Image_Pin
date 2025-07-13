@@ -1,0 +1,15 @@
+[project]
+name = "ComfyUI_Image_Pin"
+description = "Allows you to pin images to the JSON of your workflow, migrate with JSON, or embed in image's metadata. supports image compression"
+version = "1.1.0"
+license = {file = "LICENSE"}
+
+[project.urls]
+Repository = "https://github.com/CheNing233/ComfyUI_Image_Pin"
+#  Used by Comfy Registry https://registry.comfy.org
+
+[tool.comfy]
+PublisherId = "xchenning"
+DisplayName = "ComfyUI_Image_Pin"
+Icon = "https://avatars.githubusercontent.com/u/32773451"
+includes = []
