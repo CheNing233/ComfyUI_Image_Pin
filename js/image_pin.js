@@ -11,6 +11,7 @@ app.registerExtension({
 	nodeCreated(node, app) {
 		if (node.comfyClass === "ImagePin") {
 			let w = node.widgets.find(obj => obj.name === 'image_data');
+			let w_i = node.widgets.find(obj => obj.name === 'image');
 			w.hidden = true;
 			w.disabled = true;
 
@@ -29,6 +30,45 @@ app.registerExtension({
 					else {
 						return w._value;
 					}
+				}
+			});
+
+			const compressButton = node.addWidget("button", "👉 Compress (Recommended!) 👈", null, () => {
+				if (node.imgs && node.imgs[0]) {
+					const img = node.imgs[0];
+					const canvas = document.createElement('canvas');
+					const ctx = canvas.getContext('2d');
+
+					const maxSize = 512;
+					let width = img.width;
+					let height = img.height;
+
+					if(width <= maxSize && height <= maxSize){
+						console.log("Image is already small enough.");
+						return;
+					}
+
+					if (width > height) {
+						if (width > maxSize) {
+							height *= maxSize / width;
+							width = maxSize;
+						}
+					} else {
+						if (height > maxSize) {
+							width *= maxSize / height;
+							height = maxSize;
+						}
+					}
+
+					canvas.width = width;
+					canvas.height = height;
+					ctx.drawImage(img, 0, 0, width, height);
+
+					const webpData = canvas.toDataURL('image/webp', 0.6);
+					w.value = webpData;
+					w_i.value = "#DECODE_FROM_BASE64"
+
+					console.log("Image compressed.");
 				}
 			});
 

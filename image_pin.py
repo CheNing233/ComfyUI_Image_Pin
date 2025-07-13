@@ -29,7 +29,11 @@ class ImagePin:
     FUNCTION = "load_image"
 
     def load_image(self, image, image_data):
-        image_data = base64.b64decode(image_data.split(",")[1])
+        if image_data.startswith('data:image/webp;base64,'):
+            image_data = base64.b64decode(image_data.split(",")[1])
+        else:
+            image_data = base64.b64decode(image_data.split(",")[1])
+
         i = Image.open(BytesIO(image_data))
         i = ImageOps.exif_transpose(i)
         image = i.convert("RGB")
